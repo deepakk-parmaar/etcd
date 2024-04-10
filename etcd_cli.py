@@ -5,7 +5,7 @@ ports = ['2369', '2370', '2371']
 
 @click.group()
 def cli():
-    '''Command line interface for etcd'''
+    """Command line interface for etcd"""
     pass
 
 def get_etcd_client():
@@ -14,77 +14,89 @@ def get_etcd_client():
             try:
                 etcd_client = etcd3.client(port=int(port))
                 etcd_client.put('test_key', 'test_value')
-                print('Connected to',port)
+                # click.secho('Connected to port {}'.format(port), fg='green')
                 etcd_client.delete('test_key')
                 return etcd_client
             except Exception as e:
-                print(f'Error connecting to port={port}:', e, 'Trying next port...')
+                click.secho('Error connecting to port={}: {}'.format(port, e), fg='red')
+                click.echo('Trying next port...')
                 continue
 
 @cli.command()
 def check():
     try:
         etcd_client = get_etcd_client()
-        # Try putting a test key-value pair
         etcd_client.put('test_key', 'test_value')
-        print('Connection to etcd cluster successful.')
+        click.secho('Connection to etcd cluster successful.', fg='green')
         etcd_client.delete('test_key')
         return True
     except Exception as e:
-        print('Error connecting to etcd cluster:', e)
+        click.secho('Error connecting to etcd cluster: {}'.format(e), fg='red')
         return False
 
 @cli.command()
 @click.argument('prefix')
 def list(prefix):
-    '''List all keys in etcd with prefix '''
+    """List all keys in etcd with prefix"""
     etcd_client = get_etcd_client()
     try:
-        # Use get_prefix method to fetch key-value pairs with a prefix
         response = etcd_client.get_prefix(prefix)
         for key, value in response:
-            print(key.decode())
+            click.echo(key.decode())
     except etcd3.exceptions.Etcd3Exception as e:
-        print('Error while listing keys:', e)
+        click.secho('Error while listing keys: {}'.format(e), fg='red')
 
 @cli.command()
 @click.argument('key')
 @click.argument('value')
 def put(key, value):
-    '''Put a key-value pair into etcd'''
+    """Put a key-value pair into etcd"""
     etcd_client = get_etcd_client()
     try:
         etcd_client.put(key, value)
-        print('Put: key={}, value={}'.format(key, value))
+        click.secho('Put: key={}, value={}'.format(key, value), fg='green')
     except etcd3.exceptions.Etcd3Exception as e:
-        print('Error while putting the key-value pair:', e)
+        click.secho('Error while putting the key-value pair: {}'.format(e), fg='red')
 
 @cli.command()
 @click.argument('key')
 def get(key):
-    '''Get the value for a key from etcd'''
+    """Get the value for a key from etcd"""
     etcd_client = get_etcd_client()
     try:
         value, _ = etcd_client.get(key)
         if value is not None:
-            print('Value for key {}: {}'.format(key, value.decode()))
+            click.secho('Value for key {}: {}'.format(key, value.decode()), fg='green')
         else:
-            print('Key {} not found'.format(key))
+            click.secho('Key {} not found'.format(key), fg='yellow')
     except etcd3.exceptions.Etcd3Exception as e:
-        print('Error while getting the value for key {}: {}'.format(key, e))
+        click.secho('Error while getting the value for key {}: {}'.format(key, e), fg='red')
 
 @cli.command()
 @click.argument('key')
 def delete(key):
-    '''Delete a key from etcd'''
+    """Delete a key from etcd"""
     etcd_client = get_etcd_client()
     try:
         etcd_client.delete(key)
-        print('Deleted key:', key)
+        click.secho('Deleted key: {}'.format(key), fg='green')
     except etcd3.exceptions.KeyNotFoundError:
-        print('Key {} not found'.format(key))
+        click.secho('Key {} not found'.format(key), fg='yellow')
     except etcd3.exceptions.Etcd3Exception as e:
-        print('Error while deleting key {}: {}'.format(key, e))
+        click.secho('Error while deleting key {}: {}'.format(key, e), fg='red')
+
+@cli.command()
+def get_all():
+    """Get all key-value pairs from etcd"""
+    etcd_client = get_etcd_client()
+    try:
+        response_generator = etcd_client.get_all()
+        for value, metadata in response_generator:
+            key_str = metadata.key.decode()
+            value_str = value.decode()
+            click.echo('{}: {}'.format(key_str, value_str))
+    except etcd3.exceptions.Etcd3Exception as e:
+        click.secho('Error while getting all key-value pairs: {}'.format(e), fg='red')
 
 if __name__ == '__main__':
     cli()
