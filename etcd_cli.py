@@ -11,10 +11,11 @@ def cli():
 @cli.command()
 def check():
     try:
-        etcd_client = etcd3.client(host='127.0.0.1', port=2379)
+        etcd_client = etcd3.client(host='127.0.0.1', port=2379, )
         # Try putting a test key-value pair
         etcd_client.put('test_key', 'test_value')
         print('Connection to etcd server successful.')
+        etcd_client.delete('test_key')
         return True
     except Exception as e:
         print('Error connecting to etcd server:', e)

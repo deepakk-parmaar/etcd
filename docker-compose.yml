@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  etcd-node1:
+    build:
+      context: .
+      dockerfile: /node1/Dockerfile.node1
+    container_name: etcd-node1
+    ports:
+      - "2390:2390"
+      - "2369:2369"
+
+  etcd-node2:
+    build:
+      context: .
+      dockerfile: /node2/Dockerfile.node2
+    container_name: etcd-node2
+    ports:
+      - "2391:2391"
+      - "2369:2369"
+
+  etcd-node3:
+    build:
+      context: .
+      dockerfile: /node3/Dockerfile.node3
+    container_name: etcd-node3
+    ports:
+      - "2392:2392"
+      - "2369:2369"
