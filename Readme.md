@@ -1,6 +1,6 @@
 # etcd Command Line Interface (CLI)
 
-This is a Python-based command line interface (CLI) for interacting with etcd, a distributed key-value store. The CLI provides functionalities for checking connection, listing keys with a prefix, putting key-value pairs, getting values for keys, and deleting keys from etcd.
+This is a Python-based command line interface (CLI) for interacting with etcd, a distributed key-value store. The CLI provides functionalities for checking connection, getting all the key-value pairs, listing keys with a prefix, putting key-value pairs, getting values for keys, and deleting keys from etcd.
 
 ## Installation
 
@@ -9,6 +9,27 @@ This is a Python-based command line interface (CLI) for interacting with etcd, a
     git clone https://github.com/deepakk-parmaar/etcd-cli.git
     cd etcd-cli
     `
+
+## Prerequisites
+
+The CLI requires the following Python packages:
+
+- `etcd3` for interacting with etcd
+- `click` for building the CLI
+
+You can install the required packages using the following command:
+
+```bash
+pip install -r etcd3 click
+```
+
+## Docker Image
+
+The Nodes have to run as a Docker container. To build the Docker image, run the following command in the root directory of the project:
+
+```bash
+docker-compose up build
+```
 
 ## Usage
 
@@ -53,16 +74,6 @@ Delete a key from etcd.
 ```bash
 python etcd_cli.py delete <key>
 ```
-
-## Configuration
-
-You can configure the host and port of the etcd server by modifying the `etcd_cli.py` file directly:
-
-```python
-etcd_client = etcd3.client(host='127.0.0.1', port=2379)
-```
-
-Modify the `host` and `port` arguments according to your etcd server configuration.
 
 ## License
 

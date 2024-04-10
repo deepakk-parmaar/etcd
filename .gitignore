@@ -1,2 +1,4 @@
 default.etcd/
 *.pdf
+*.swp
+__pycache__/
