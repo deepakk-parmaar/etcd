@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   etcd-node1:
@@ -6,6 +6,18 @@ services:
       context: .
       dockerfile: /node1/Dockerfile.node1
     container_name: etcd-node1
+    networks:
+      - etcd-network
+    environment:
+      - ETCD_NAME=etcd-1
+      - ETCD_DATA_DIR=/etcd1
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://etcd-node1:2390
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2390
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2369,http://localhost:2369
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd-node1:2369
+      - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+      - ETCD_INITIAL_CLUSTER=etcd-1=http://etcd-node1:2390,etcd-2=http://etcd-node2:2391,etcd-3=http://etcd-node3:2392
+      - ETCD_INITIAL_CLUSTER_STATE=new
     ports:
       - "2390:2390"
       - "2369:2369"
@@ -15,15 +27,42 @@ services:
       context: .
       dockerfile: /node2/Dockerfile.node2
     container_name: etcd-node2
+    networks:
+      - etcd-network
+    environment:
+      - ETCD_NAME=etcd-2
+      - ETCD_DATA_DIR=/etcd2
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://etcd-node2:2391
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2391
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2370,http://localhost:2370
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd-node2:2370
+      - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+      - ETCD_INITIAL_CLUSTER=etcd-1=http://etcd-node1:2390,etcd-2=http://etcd-node2:2391,etcd-3=http://etcd-node3:2392
+      - ETCD_INITIAL_CLUSTER_STATE=new
     ports:
       - "2391:2391"
-      - "2369:2369"
+      - "2370:2370"
 
   etcd-node3:
     build:
       context: .
       dockerfile: /node3/Dockerfile.node3
     container_name: etcd-node3
+    networks:
+      - etcd-network
+    environment:
+      - ETCD_NAME=etcd-3
+      - ETCD_DATA_DIR=/etcd3
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://etcd-node3:2392
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2392
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2371,http://localhost:2371
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd-node3:2371
+      - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+      - ETCD_INITIAL_CLUSTER=etcd-1=http://etcd-node1:2390,etcd-2=http://etcd-node2:2391,etcd-3=http://etcd-node3:2392
+      - ETCD_INITIAL_CLUSTER_STATE=new
     ports:
       - "2392:2392"
-      - "2369:2369"
+      - "2371:2371"
+
+networks:
+  etcd-network:

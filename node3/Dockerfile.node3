@@ -5,10 +5,10 @@ FROM quay.io/coreos/etcd:v3.4.0
 WORKDIR /
 
 # Copy the configuration file into the container
-COPY etcd-config.yml /etc/etcd/etcd.yml
+COPY /node3/etcd-config.yml /etc/etcd/etcd.yml
 
 # Expose the peer and client ports
-EXPOSE 2392 2369
+EXPOSE 2392 2371
 
 # Command to run etcd with the custom configuration file
 CMD ["etcd", "--config-file=/etc/etcd/etcd.yml"]

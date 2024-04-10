@@ -1,9 +1,9 @@
 name: etcd-2
 data-dir: /etcd2
-initial-advertise-peer-urls: http://127.0.0.2:2391
-listen-peer-urls: http://127.0.0.2:2391
-listen-client-urls: http://127.0.0.2:2369,http://localhost:2369
-advertise-client-urls: http://127.0.0.2:2369
+initial-advertise-peer-urls: http://etcd-node2:2391
+listen-peer-urls: http://0.0.0.0:2391
+listen-client-urls: http://0.0.0.0:2370
+advertise-client-urls: http://etcd-node2:2370
 initial-cluster-token: etcd-cluster
-initial-cluster: "etcd-1=http://127.0.0.2:2390,etcd-2=http://127.0.0.2:2391,etcd-3=http://127.0.0.2:2392"
+initial-cluster: "etcd-1=http://etcd-node1:2390,etcd-2=http://etcd-node2:2391,etcd-3=http://etcd-node3:2392"
 initial-cluster-state: new

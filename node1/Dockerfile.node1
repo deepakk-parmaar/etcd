@@ -5,7 +5,7 @@ FROM quay.io/coreos/etcd:v3.4.0
 WORKDIR /
 
 # Copy the configuration file into the container
-COPY etcd-config.yml /etc/etcd/etcd.yml
+COPY /node1/etcd-config.yml /etc/etcd/etcd.yml
 
 # Expose the peer and client ports
 EXPOSE 2390 2369
