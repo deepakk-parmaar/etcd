@@ -4,11 +4,11 @@ This is a Python-based command line interface (CLI) for interacting with etcd, a
 
 ## Installation
 
-**Clone the repository:** 
-    ```bash
+**Clone the repository:**
+`bash
     git clone https://github.com/deepakk-parmaar/etcd-cli.git
     cd etcd-cli
-    ```
+    `
 
 ## Usage
 
@@ -19,7 +19,7 @@ The CLI supports the following commands:
 Check the connection to the etcd server.
 
 ```bash
-python cli.py check
+python etcd_cli.py check
 ```
 
 ### `list <prefix>`
@@ -27,7 +27,7 @@ python cli.py check
 List all keys in etcd with a specified prefix.
 
 ```bash
-python cli.py list <prefix>
+python etcd_cli.py list <prefix>
 ```
 
 ### `put <key> <value>`
@@ -35,7 +35,7 @@ python cli.py list <prefix>
 Put a key-value pair into etcd.
 
 ```bash
-python cli.py put <key> <value>
+python etcd_cli.py put <key> <value>
 ```
 
 ### `get <key>`
@@ -43,7 +43,7 @@ python cli.py put <key> <value>
 Get the value for a key from etcd.
 
 ```bash
-python cli.py get <key>
+python etcd_cli.py get <key>
 ```
 
 ### `delete <key>`
@@ -51,12 +51,12 @@ python cli.py get <key>
 Delete a key from etcd.
 
 ```bash
-python cli.py delete <key>
+python etcd_cli.py delete <key>
 ```
 
 ## Configuration
 
-You can configure the host and port of the etcd server by modifying the `cli.py` file directly:
+You can configure the host and port of the etcd server by modifying the `etcd_cli.py` file directly:
 
 ```python
 etcd_client = etcd3.client(host='127.0.0.1', port=2379)
