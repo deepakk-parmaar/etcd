@@ -13,9 +13,9 @@ def get_etcd_client():
         for port in ports:
             try:
                 etcd_client = etcd3.client(port=int(port))
-                etcd_client.put('test_key', 'test_value')
-                # click.secho('Connected to port {}'.format(port), fg='green')
-                etcd_client.delete('test_key')
+                # etcd_client.put('test_key', 'test_value')
+                # # click.secho('Connected to port {}'.format(port), fg='green')
+                # etcd_client.delete('test_key')
                 return etcd_client
             except Exception as e:
                 click.secho('Error connecting to port={}: {}'.format(port, e), fg='red')
@@ -29,6 +29,13 @@ def check():
         etcd_client.put('test_key', 'test_value')
         click.secho('Connection to etcd cluster successful.', fg='green')
         etcd_client.delete('test_key')
+        status = etcd_client.status()
+        # click.echo('Raft term: {}'.format(status.raft_term))
+        click.echo('Leader ID: {}'.format(status.leader))
+        # click.echo('Raft index: {}'.format(status.raft_index))
+        # click.echo('Version: {}'.format(status.version))
+        # click.echo('db size: {}'.format(status.db_size))
+
         return True
     except Exception as e:
         click.secho('Error connecting to etcd cluster: {}'.format(e), fg='red')
@@ -43,6 +50,7 @@ def list(prefix):
         response = etcd_client.get_prefix(prefix)
         for key, value in response:
             click.echo(key.decode())
+            
     except etcd3.exceptions.Etcd3Exception as e:
         click.secho('Error while listing keys: {}'.format(e), fg='red')
 
